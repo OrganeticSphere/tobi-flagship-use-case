@@ -1,0 +1,1 @@
+bind(ID(token), DEC(1), ID(token))
