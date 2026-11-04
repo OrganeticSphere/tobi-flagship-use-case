@@ -41,14 +41,22 @@ The expected validator outputs are pinned in:
 
 ### GitHub Actions path
 
-1. Create a repository secret:
-    - `TOBI_EVAL_TOKEN`
+1. Push the repository or open a pull request.
+2. Run the workflow manually from Actions if needed.
 
-2. Push this repository.
+No registration, access token, or repository secret is required. Both jobs use
+the public Action, which downloads public GitHub Release binaries and verifies
+SHA-256 checksums before use.
 
-3. Open a pull request or run the workflow manually.
-
-The PR gate uses:
+The PR check uses:
 
 ```yaml
-uses: OrganeticSphere/tobi-validator@v1
+- uses: OrganeticSphere/tobi-validator@v2
+  with:
+    mode: canon
+    canon_input: agent_artifacts/merge_token_valid.tsubasa
+```
+
+Tobi supplies a validator result. The consuming repository owns merge and
+release policy. `_h` is compatibility identity only; acceptance does not
+establish factual truth or universal correctness.
