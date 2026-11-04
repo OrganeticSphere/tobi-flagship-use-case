@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Show repository gate contract
-        shell: powershell
+        shell: pwsh
         run: Get-Content .\policy\stage1_gate_contract.md
 
       - name: Run Tobi Validator action in canon mode
@@ -42,7 +42,7 @@ jobs:
           canon_input: agent_artifacts/merge_token_valid.tsubasa
 
       - name: Validate canonical output for valid artifact
-        shell: powershell
+        shell: pwsh
         run: |
           $path = (Resolve-Path ".\agent_artifacts\merge_token_valid.tsubasa").Path
           $out = & "$env:TOBI_EXE_PATH" canon $path 2>&1 | Out-String
@@ -71,7 +71,7 @@ jobs:
           Set-Content ".\valid_output.txt" $out
 
       - name: Validate convergence for drift-equivalent artifact
-        shell: powershell
+        shell: pwsh
         run: |
           $path = (Resolve-Path ".\agent_artifacts\merge_token_drift_equivalent.tsubasa").Path
           $out = & "$env:TOBI_EXE_PATH" canon $path 2>&1 | Out-String
@@ -100,8 +100,9 @@ jobs:
           Set-Content ".\drift_equivalent_output.txt" $out
 
       - name: Validate reject behavior for invalid artifact
-        shell: powershell
+        shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
           $path = (Resolve-Path ".\agent_artifacts\merge_token_invalid.tsubasa").Path
           $out = & "$env:TOBI_EXE_PATH" canon $path 2>&1 | Out-String
           if ($LASTEXITCODE -eq 0) {
@@ -114,6 +115,7 @@ jobs:
           }
 
           Set-Content ".\invalid_output.txt" $out
+          exit 0
 
       - name: Upload validation evidence
         uses: actions/upload-artifact@v4
